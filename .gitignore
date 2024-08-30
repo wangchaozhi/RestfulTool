@@ -1,7 +1,7 @@
 
 /build
 .gradle
-.idea
+/.run/
 #.idea/.gitignore
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -43,3 +43,8 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/.idea/compiler.xml
+/.idea/jarRepositories.xml
+/.idea/kotlinc.xml
+/.idea/modules.xml
+/.idea/uiDesigner.xml
