@@ -1,0 +1,108 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.wangchaozhi.PluginDemo1</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>PluginDemo1</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.properties</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="com.wangchaozhi.plugindemo1.tool.configuration.RestfulSetting"/>
+
+        <applicationConfigurable parentId="tools"
+                                 instance="com.wangchaozhi.plugindemo1.tool.configuration.RestfulSettingConfigurable"
+                                 id="com.wangchaozhi.plugindemo1.tool.configuration.RestfulSettingConfigurable"
+                                 dynamic="true"
+                                 bundle="messages.RestfulToolBundle"
+                                 key="setting.configurable.displayName"/>
+
+        <projectService serviceInterface="com.wangchaozhi.plugindemo1.tool.service.ToolWindowService"
+                        serviceImplementation="com.wangchaozhi.plugindemo1.tool.service.impl.ToolWindowServiceImpl"/>
+
+        <projectService
+                serviceImplementation="com.wangchaozhi.plugindemo1.tool.view.search.GotoRequestConfiguration"/>
+
+        <toolWindow id="RestfulTool" anchor="right"
+                    factoryClass="com.wangchaozhi.plugindemo1.tool.view.window.RestfulToolWindowFactory"
+                    order="last"
+                    doNotActivateOnStart="true" icon="AllIcons.Toolwindows.WebToolWindow"
+                    canCloseContents="true"/>
+
+        <projectService serviceInterface="com.wangchaozhi.plugindemo1.tool.service.Notify"
+                        serviceImplementation="com.wangchaozhi.plugindemo1.tool.service.impl.NotificationImpl"/>
+
+        <projectService serviceInterface="com.wangchaozhi.plugindemo1.tool.service.CacheService"
+                        serviceImplementation="com.wangchaozhi.plugindemo1.tool.service.impl.CacheServiceImpl"/>
+
+        <notificationGroup displayType="BALLOON" id="RestfulTool.Notify" toolWindowId="RestfulTool"/>
+    </extensions>
+
+    <actions>
+        <action id="Tool.GotoRequestService"
+                class="com.wangchaozhi.plugindemo1.tool.view.search.GotoRequestAction">
+            <add-to-group group-id="GoToTargetEx" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
+        </action>
+
+        <action id="RestfulTool.action.OptionForEditor-CurrentClassTree"
+                class="com.wangchaozhi.plugindemo1.tool.actions.dialog.CurrClassTreeAction">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <group id="RestfulTool.action.OptionForEditors"
+               class="com.wangchaozhi.plugindemo1.tool.actions.copy.OptionForEditorGroups">
+            <add-to-group group-id="EditorPopupMenu" anchor="after"
+                          relative-to-action="RestfulTool.action.OptionForEditor-CurrentClassTree"/>
+            <action id="RestfulTool.action.OptionForEditor-NavigationServiceTreeAction"
+                    class="com.wangchaozhi.plugindemo1.tool.actions.copy.NavigationServiceTreeAction"/>
+            <action id="RestfulTool.action.OptionForEditor-CopyApiPath"
+                    class="com.wangchaozhi.plugindemo1.tool.actions.copy.CopyApiAction"/>
+            <action id="RestfulTool.action.OptionForEditor-CopyFullPath"
+                    class="com.wangchaozhi.plugindemo1.tool.actions.copy.CopyFullAction"/>
+        </group>
+
+        <group id="RestfulTool.Toolbar">
+
+            <action class="com.wangchaozhi.plugindemo1.tool.actions.RefreshAction"/>
+
+            <reference ref="Tool.GotoRequestService"/>
+
+            <separator text="Separator"/>
+
+            <action class="com.wangchaozhi.plugindemo1.tool.actions.ScanFilterAction"/>
+
+            <action class="com.wangchaozhi.plugindemo1.tool.actions.WithLibraryAction"/>
+
+        </group>
+    </actions>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Define a tool window extension -->
+        <toolWindow id="My Kotlin Tool Window"
+                    factoryClass="com.wangchaozhi.plugindemo1.MyToolWindowFactory"
+                    anchor="right"/>
+
+    </extensions>
+</idea-plugin>
